@@ -1,0 +1,7 @@
+asgiref==3.5.2
+django==4.1.1
+sqlparse==0.4.3
+tzdata==2022.4
+djangorestframework==3.14.0
+pytz==2022.4
+Faker==4.1.2
