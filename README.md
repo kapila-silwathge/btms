@@ -34,6 +34,7 @@ Instructions
 NOTE: 
 * This a sample api only. 
 * TODO for this API: including team scores and winning team correctly.
+* TODO: expose other APIs
 
 
 
