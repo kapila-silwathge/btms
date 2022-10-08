@@ -2,8 +2,6 @@ from django.conf import settings
 
 from django.db import models
 
-from django.utils.functional import cached_property
-
 
 class Role(models.Model):
     ADMIN = 'A'
@@ -33,9 +31,8 @@ class UserRole(models.Model):
 
     def __str__(self):
         return '{first_name} {last_name} ({type})'.format(first_name=self.user.first_name,
-                                                              last_name=self.user.last_name,
-                                                              type=self.role.type)
-
+                                                          last_name=self.user.last_name,
+                                                          type=self.role.type)
 
 
 class Player(models.Model):
@@ -56,7 +53,6 @@ class Player(models.Model):
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.user.first_name,
                                                  last_name=self.user.last_name)
-
 
 
 class Coach(models.Model):

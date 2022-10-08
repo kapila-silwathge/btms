@@ -9,7 +9,7 @@ from tournament.models import Game, Role, UserRole, Player, Team, Coach, GameTea
 
 class Command(BaseCommand):
 
-    def roles(self, fake):
+    def roles(self):
         ADMIN = 'A'
         PLAYER = 'P'
         COACH = 'C'
@@ -29,7 +29,7 @@ class Command(BaseCommand):
             user.save()
         self.stdout.write(self.style.SUCCESS("""Users Created. password is 'kapila'"""))
 
-    def user_roles(self, fake):
+    def user_roles(self):
         users = User.objects.filter(is_superuser=False)
 
         admin = get_object_or_404(Role, type='A')
@@ -52,7 +52,7 @@ class Command(BaseCommand):
             u.save()
         self.stdout.write(self.style.SUCCESS('User Role mapped :  %s ' % admin.type))
 
-    def coaches(self, fake):
+    def coaches(self):
         role = get_object_or_404(Role, type='C')
         user_role = UserRole.objects.filter(role_id=role.id)
 
@@ -106,7 +106,7 @@ class Command(BaseCommand):
         teams = Game.objects.filter(round=3)
         self.create_game(fake, teams, 4)
 
-    def create_game(self, fake, teams, round):
+    def create_game(self, fake, teams, game_round):
         home_teams = teams[1::2]
         away_teams = teams[0::2]
         for i in range(len(home_teams)):
@@ -116,7 +116,7 @@ class Command(BaseCommand):
             away = away_teams[i]
             winner = home if home_score > away_score else away
 
-            game = Game(winner=winner, round=round,
+            game = Game(winner=winner, round=game_round,
                         date=fake.date_time_this_decade(before_now=True, after_now=False, tzinfo=None))
             game.save()
             game_team_home = GameTeam(score=home_score, game_id=game.id, team_id=home.id)
@@ -124,7 +124,7 @@ class Command(BaseCommand):
             game_team_away = GameTeam(score=away_score, game_id=game.id, team_id=away.id)
             game_team_away.save()
 
-        self.stdout.write(self.style.SUCCESS('Games with teams inserted for round  "%s" ' % round))
+        self.stdout.write(self.style.SUCCESS('Games with teams inserted for round  "%s" ' % game_round))
 
     def game_player(self, fake):
         game_teams = GameTeam.objects.all()
@@ -142,14 +142,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         fake = Faker()
         self.stdout.write(self.style.SUCCESS('populating roles...'))
-        self.roles(fake)
+        self.roles()
         self.stdout.write(self.style.SUCCESS('populating users...'))
         self.users(fake)
         self.stdout.write(self.style.SUCCESS('populating user_roles...'))
-        self.user_roles(fake)
+        self.user_roles()
         self.stdout.write(self.style.SUCCESS('populating coaches...'))
 
-        self.coaches(fake)
+        self.coaches()
         self.stdout.write(self.style.SUCCESS('populating teams...'))
         self.teams(fake)
         self.stdout.write(self.style.SUCCESS('populating players...'))
